@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { 
@@ -16,6 +16,7 @@ import { db } from '../firebase';
 import JobCard from './JobCard';
 import AddJobModal from './AddJobModal';
 import toast from 'react-hot-toast';
+import ContactWidget from './ContactWidget';
 
 const statusOptions = [
   { value: 'all', label: 'All Status' },
@@ -26,6 +27,24 @@ const statusOptions = [
   { value: 'withdrawn', label: 'Withdrawn' }
 ];
 
+const statusDotColors = {
+  all: 'bg-gray-400',
+  applied: 'bg-yellow-400',
+  interview: 'bg-purple-500',
+  offer: 'bg-green-500',
+  rejected: 'bg-red-500',
+  withdrawn: 'bg-gray-500'
+};
+
+function StatusDot({ status }) {
+  return (
+    <span
+      className={`inline-block w-3 h-3 rounded-full mr-2 align-middle ${statusDotColors[status] || 'bg-gray-400'}`}
+      title={status.charAt(0).toUpperCase() + status.slice(1)}
+    />
+  );
+}
+
 export default function Dashboard() {
   const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
@@ -34,6 +53,18 @@ export default function Dashboard() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [showAddModal, setShowAddModal] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   useEffect(() => {
     if (!currentUser) {
@@ -199,11 +230,11 @@ export default function Dashboard() {
         </div>
 
         {/* Controls */}
-        <div className="glass-card p-6 mb-8">
+        <div className="glass-card p-6 mb-8 relative z-[100]">
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center space-y-4 lg:space-y-0 lg:space-x-6">
             <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 w-full lg:w-auto">
               <div className="relative">
-                <Search className="absolute left-4 top-4 h-5 w-5 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-7 w-7 text-black-600 drop-shadow-sm pointer-events-none" />
                 <input
                   type="text"
                   placeholder="Search companies or roles..."
@@ -212,19 +243,40 @@ export default function Dashboard() {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-              <div className="relative">
-                <Filter className="absolute left-4 top-4 h-5 w-5 text-gray-400" />
-                <select
-                  className="input-field pl-12 appearance-none"
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
+              {/* Custom Status Dropdown */}
+              <div className="relative min-w-[180px]" ref={dropdownRef}>
+                <button
+                  type="button"
+                  className="input-field pl-12 pr-8 w-full flex items-center justify-between cursor-pointer"
+                  onClick={() => setDropdownOpen((open) => !open)}
+                  aria-haspopup="listbox"
+                  aria-expanded={dropdownOpen}
                 >
-                  {statusOptions.map(option => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
+                  <span className="flex items-center">
+                    <StatusDot status={statusFilter} />
+                    {statusOptions.find(opt => opt.value === statusFilter)?.label || 'All Status'}
+                  </span>
+                  <svg className="w-4 h-4 ml-2 text-gray-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                </button>
+                {dropdownOpen && (
+                  <ul className="absolute z-[9999] mt-2 w-full min-w-[180px] bg-white border border-gray-200 rounded-xl shadow-2xl py-1 max-h-60 overflow-auto" role="listbox" style={{zIndex: 9999, boxShadow: '0 8px 24px rgba(0,0,0,0.12)'}}>
+                    {statusOptions.map(option => (
+                      <li
+                        key={option.value}
+                        className={`flex items-center px-4 py-2 cursor-pointer hover:bg-gray-100 ${statusFilter === option.value ? 'bg-gray-100 font-semibold' : ''}`}
+                        onClick={() => { setStatusFilter(option.value); setDropdownOpen(false); }}
+                        role="option"
+                        aria-selected={statusFilter === option.value}
+                        tabIndex={0}
+                        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { setStatusFilter(option.value); setDropdownOpen(false); } }}
+                      >
+                        <StatusDot status={option.value} />
+                        {option.label}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                <Filter className="absolute left-4 top-4 h-5 w-5 text-gray-400 pointer-events-none" />
               </div>
             </div>
             <button
@@ -274,6 +326,7 @@ export default function Dashboard() {
           onJobAdded={() => setShowAddModal(false)}
         />
       )}
+      <ContactWidget />
     </div>
   );
 } 

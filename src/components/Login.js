@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { Eye, EyeOff, Mail, Lock, Briefcase, ArrowRight } from 'lucide-react';
 import toast from 'react-hot-toast';
+import ContactWidget from './ContactWidget';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -129,6 +130,7 @@ export default function Login() {
           </form>
         </div>
       </div>
+      <ContactWidget />
     </div>
   );
 } 
