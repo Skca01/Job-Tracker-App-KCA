@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
-import { X, DollarSign } from 'lucide-react';
+import { X } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const statusOptions = [

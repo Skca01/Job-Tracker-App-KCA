@@ -3,7 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../firebase';
-import { X, Upload, FileText, DollarSign } from 'lucide-react';
+import { X, Upload, FileText } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const statusOptions = [

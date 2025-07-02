@@ -9,7 +9,6 @@ import {
   User,
   Briefcase,
   Calendar,
-  MapPin,
   DollarSign
 } from 'lucide-react';
 import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
