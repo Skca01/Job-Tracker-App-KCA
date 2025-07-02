@@ -60,7 +60,7 @@ export default function ContactWidget() {
             aria-label="GitHub: github.com/Skca01"
             style={{ outline: 'none' }}
           >
-            <Github className="h-5 w-5 transition-transform duration-150 group-hover:scale-110" style={{ color: '#fff' }} />
+            <Github className="h-5 w-5 transition-transform duration-150 group-hover:scale-110 group-hover:text-black" style={{ color: '#181717' }} />
             <span className="hover:underline">github.com/Skca01</span>
           </a>
           <div className="border-t border-gray-100 dark:border-gray-800 my-1" />
