@@ -230,7 +230,7 @@ export default function Dashboard() {
         </div>
 
         {/* Controls */}
-        <div className="glass-card p-6 mb-8 relative z-[100]">
+        <div className="glass-card p-6 mb-8 relative z-10">
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center space-y-4 lg:space-y-0 lg:space-x-6">
             <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 w-full lg:w-auto">
               <div className="relative">
