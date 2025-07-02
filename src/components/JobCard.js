@@ -6,7 +6,8 @@ import {
   Calendar, 
   DollarSign, 
   ExternalLink,
-  FileText
+  FileText,
+  Download
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { doc, deleteDoc } from 'firebase/firestore';
@@ -174,9 +175,24 @@ export default function JobCard({ job }) {
               </a>
             )}
             {job.attachments && job.attachments.length > 0 && (
-              <div className="flex items-center text-sm text-gray-500">
-                <FileText className="h-4 w-4 mr-2" />
-                <span>{job.attachments.length} file(s)</span>
+              <div className="flex flex-col gap-2 text-sm text-gray-500">
+                <div className="font-medium text-gray-700 mb-1 flex items-center">
+                  <FileText className="h-4 w-4 mr-2" />
+                  Attachments:
+                </div>
+                {job.attachments.map((file, idx) => (
+                  <a
+                    key={idx}
+                    href={file.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 hover:text-blue-600"
+                    download
+                  >
+                    <Download className="h-4 w-4" />
+                    <span className="underline">{file.name}</span>
+                  </a>
+                ))}
               </div>
             )}
           </div>
