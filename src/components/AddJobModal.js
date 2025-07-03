@@ -121,19 +121,20 @@ export default function AddJobModal({ onClose, onJobAdded }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="flex justify-between items-center p-6 border-b border-gray-200">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-2 z-50 transition-opacity duration-300 animate-fadeIn">
+      <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl p-1 animate-scaleIn">
+        <div className="flex justify-between items-center p-4 border-b border-gray-200">
           <h2 className="text-xl font-semibold text-gray-900">Add Job Application</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600"
+            className="text-gray-400 hover:text-gray-600 rounded-full p-2 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            aria-label="Close"
           >
-            <X className="h-6 w-6" />
+            <X className="h-7 w-7" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <form onSubmit={handleSubmit} className="p-4 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -306,14 +307,14 @@ export default function AddJobModal({ onClose, onJobAdded }) {
             <button
               type="button"
               onClick={onClose}
-              className="btn-secondary"
+              className="btn-secondary px-5 py-3 text-base rounded-xl"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading || uploading}
-              className="btn-primary"
+              className="btn-primary px-5 py-3 text-base rounded-xl"
             >
               {loading ? 'Adding...' : uploading ? 'Uploading files...' : 'Add Job'}
             </button>

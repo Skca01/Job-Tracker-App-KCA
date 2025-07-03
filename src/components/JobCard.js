@@ -99,7 +99,7 @@ export default function JobCard({ job }) {
 
   return (
     <>
-      <div className="card group">
+      <div className="card group bg-white rounded-2xl shadow-md p-5 mb-4 transition-transform duration-200 active:scale-98 hover:shadow-lg border border-gray-100">
         <div className="flex justify-between items-start mb-6">
           <div className="flex-1">
             <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
@@ -126,21 +126,21 @@ export default function JobCard({ job }) {
               )}
             </div>
           </div>
-          <div className="flex items-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div className="flex items-center space-x-2 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <button
               onClick={() => setShowEditModal(true)}
-              className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all duration-300"
+              className="p-3 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-200"
               title="Edit"
             >
-              <Edit className="h-4 w-4" />
+              <Edit className="h-5 w-5" />
             </button>
             <button
               onClick={handleDelete}
               disabled={deleting}
-              className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all duration-300"
+              className="p-3 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-red-200"
               title="Delete"
             >
-              <Trash2 className="h-4 w-4" />
+              <Trash2 className="h-5 w-5" />
             </button>
           </div>
         </div>

@@ -9,7 +9,9 @@ import {
   User,
   Briefcase,
   Calendar,
-  DollarSign
+  DollarSign,
+  UserCircle,
+  ArrowLeftOnRectangleIcon
 } from 'lucide-react';
 import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -17,6 +19,7 @@ import JobCard from './JobCard';
 import AddJobModal from './AddJobModal';
 import toast from 'react-hot-toast';
 import ContactWidget from './ContactWidget';
+import { Cog6ToothIcon } from '@heroicons/react/24/outline';
 
 const statusOptions = [
   { value: 'all', label: 'All Status' },
@@ -55,11 +58,17 @@ export default function Dashboard() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const settingsRef = useRef(null);
+  const [showProfileModal, setShowProfileModal] = useState(false);
 
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setDropdownOpen(false);
+      }
+      if (settingsRef.current && !settingsRef.current.contains(event.target)) {
+        setSettingsOpen(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
@@ -138,35 +147,32 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <header className="glass-card border-b-0 rounded-none shadow-lg">
-        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
-          <div className="flex flex-col items-center sm:flex-row sm:justify-between sm:items-center py-4 sm:py-6 gap-4 sm:gap-0 text-center sm:text-left">
+      <header className="backdrop-blur bg-white/70 border-b border-gray-100 shadow-md sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8">
+          <div className="flex items-center justify-between h-20">
             {/* Logo and Title */}
-            <div className="flex flex-col items-center sm:flex-row sm:items-center sm:space-x-4 w-full sm:w-auto">
-              <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center mx-auto sm:mx-0 mb-2 sm:mb-0">
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center">
                 <Briefcase className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold gradient-text">Job Tracker</h1>
-                <p className="text-sm text-gray-600">Manage your career journey</p>
+                <h1 className="text-2xl font-bold text-gray-900 leading-tight">Job Tracker</h1>
+                <p className="text-xs text-gray-500 font-medium">Manage your career journey</p>
               </div>
             </div>
-            {/* User Info and Logout */}
-            <div className="flex flex-col items-center gap-2 sm:flex-row sm:items-center sm:space-x-6 w-full sm:w-auto">
-              <div className="flex items-center space-x-2 bg-white/50 rounded-xl px-4 py-2 mx-auto sm:mx-0">
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center">
-                  <User className="h-4 w-4 text-white" />
-                </div>
-                <span className="font-medium text-gray-700 text-base">{currentUser?.displayName || currentUser?.email}</span>
+            {/* Desktop Profile Avatar Button */}
+            <button
+              className="hidden sm:flex items-center gap-2 p-2 rounded-full hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-300 transition"
+              onClick={() => setShowProfileModal(true)}
+              aria-label="Open profile menu"
+            >
+              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center text-lg font-bold text-white">
+                {currentUser?.displayName?.[0]
+                  || currentUser?.email?.[0]
+                  ? (currentUser?.displayName?.[0] || currentUser?.email?.[0])
+                  : <UserCircle className="h-7 w-7 text-white" />}
               </div>
-              <button
-                onClick={handleLogout}
-                className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 bg-white/50 hover:bg-white/70 rounded-xl px-4 py-2 transition-all duration-300 text-base mx-auto sm:mx-0"
-              >
-                <LogOut className="h-5 w-5" />
-                <span>Logout</span>
-              </button>
-            </div>
+            </button>
           </div>
         </div>
       </header>
@@ -174,59 +180,50 @@ export default function Dashboard() {
       <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 py-4 sm:py-8">
         {/* Stats */}
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 sm:gap-6 mb-6 sm:mb-10">
-          <div className="card group">
-            <div className="flex items-center">
-              <div className="p-3 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl group-hover:scale-110 transition-transform duration-300">
-                <Briefcase className="h-6 w-6 text-white" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total</p>
-                <p className="text-3xl font-bold text-gray-900">{stats.total}</p>
-              </div>
+          {/* First row: Total Jobs, spans two columns on mobile */}
+          <div className="card group col-span-2 sm:col-span-1 flex flex-row items-center justify-center text-center py-3 sm:py-0 gap-2">
+            <div className="p-2 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl group-hover:scale-110 transition-transform duration-300">
+              <Briefcase className="h-5 w-5 text-white" />
+            </div>
+            <span className="text-sm font-medium text-gray-600">Total Jobs</span>
+            <span className="text-2xl font-bold text-gray-900 ml-2">{stats.total}</span>
+          </div>
+          {/* Second row: Applied (left), Interview (right) */}
+          <div className="card group flex items-center sm:flex-col sm:items-start">
+            <div className="p-3 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl group-hover:scale-110 transition-transform duration-300">
+              <Calendar className="h-6 w-6 text-white" />
+            </div>
+            <div className="ml-4 sm:ml-0">
+              <p className="text-sm font-medium text-gray-600">Applied</p>
+              <p className="text-3xl font-bold text-gray-900">{stats.applied}</p>
             </div>
           </div>
-          <div className="card group">
-            <div className="flex items-center">
-              <div className="p-3 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl group-hover:scale-110 transition-transform duration-300">
-                <Calendar className="h-6 w-6 text-white" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Applied</p>
-                <p className="text-3xl font-bold text-gray-900">{stats.applied}</p>
-              </div>
+          <div className="card group flex items-center sm:flex-col sm:items-start">
+            <div className="p-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl group-hover:scale-110 transition-transform duration-300">
+              <Calendar className="h-6 w-6 text-white" />
+            </div>
+            <div className="ml-4 sm:ml-0">
+              <p className="text-sm font-medium text-gray-600">Interview</p>
+              <p className="text-3xl font-bold text-gray-900">{stats.interview}</p>
             </div>
           </div>
-          <div className="card group">
-            <div className="flex items-center">
-              <div className="p-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl group-hover:scale-110 transition-transform duration-300">
-                <Calendar className="h-6 w-6 text-white" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Interview</p>
-                <p className="text-3xl font-bold text-gray-900">{stats.interview}</p>
-              </div>
+          {/* Third row: Offer (left), Rejected (right) */}
+          <div className="card group flex items-center sm:flex-col sm:items-start">
+            <div className="p-3 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl group-hover:scale-110 transition-transform duration-300">
+              <DollarSign className="h-6 w-6 text-white" />
+            </div>
+            <div className="ml-4 sm:ml-0">
+              <p className="text-sm font-medium text-gray-600">Offer</p>
+              <p className="text-3xl font-bold text-gray-900">{stats.offer}</p>
             </div>
           </div>
-          <div className="card group">
-            <div className="flex items-center">
-              <div className="p-3 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl group-hover:scale-110 transition-transform duration-300">
-                <DollarSign className="h-6 w-6 text-white" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Offers</p>
-                <p className="text-3xl font-bold text-gray-900">{stats.offer}</p>
-              </div>
+          <div className="card group flex items-center sm:flex-col sm:items-start">
+            <div className="p-3 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl group-hover:scale-110 transition-transform duration-300">
+              <Calendar className="h-6 w-6 text-white" />
             </div>
-          </div>
-          <div className="card group">
-            <div className="flex items-center">
-              <div className="p-3 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl group-hover:scale-110 transition-transform duration-300">
-                <Calendar className="h-6 w-6 text-white" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Rejected</p>
-                <p className="text-3xl font-bold text-gray-900">{stats.rejected}</p>
-              </div>
+            <div className="ml-4 sm:ml-0">
+              <p className="text-sm font-medium text-gray-600">Rejected</p>
+              <p className="text-3xl font-bold text-gray-900">{stats.rejected}</p>
             </div>
           </div>
         </div>
@@ -290,13 +287,7 @@ export default function Dashboard() {
           </div>
         </div>
         {/* Floating Add Job Button for Mobile */}
-        <button
-          onClick={() => setShowAddModal(true)}
-          className="sm:hidden fixed bottom-20 right-6 z-40 bg-gradient-to-tr from-blue-600 to-indigo-500 hover:from-blue-700 hover:to-indigo-600 text-white rounded-full shadow-2xl p-5 flex items-center justify-center transition-all duration-200 border-2 border-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-          aria-label="Add Job"
-        >
-          <Plus className="h-8 w-8" />
-        </button>
+        {/* (Removed) */}
 
         {/* Job List */}
         {/* Mobile: horizontally scrollable job cards */}
@@ -346,16 +337,39 @@ export default function Dashboard() {
           onJobAdded={() => setShowAddModal(false)}
         />
       )}
-      <ContactWidget mobileOffset={true} />
-      <style>{`
-        @media (max-width: 640px) {
-          .contact-widget-mobile {
-            bottom: 90px !important;
-            right: 16px !important;
-            transform: scale(0.85);
-          }
-        }
-      `}</style>
+      {/* Floating ContactWidget for mobile, adjusted lower */}
+      {!showProfileModal && (
+        <div className="fixed right-10 bottom-20 z-40 sm:hidden">
+          <ContactWidget />
+        </div>
+      )}
+      {/* Floating ContactWidget for desktop */}
+      {!showProfileModal && (
+        <div className="hidden sm:flex fixed right-10 bottom-10 z-40">
+          <ContactWidget />
+        </div>
+      )}
+      {/* Profile Modal (shared for both triggers) */}
+      {showProfileModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl shadow-2xl w-80 max-w-full p-6 relative">
+            <button className="absolute top-3 right-3 text-gray-400 hover:text-gray-600" onClick={() => setShowProfileModal(false)}>&times;</button>
+            <div className="flex flex-col items-center mb-4">
+              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center text-2xl font-bold text-white mb-2">
+                {currentUser?.displayName?.[0] || currentUser?.email?.[0] || 'U'}
+              </div>
+              <div className="text-center">
+                <div className="font-semibold text-gray-800 text-lg">{currentUser?.displayName || currentUser?.email || 'User'}</div>
+                <div className="text-xs text-gray-500">Profile</div>
+              </div>
+            </div>
+            <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 px-4 py-3 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all duration-200 text-base font-medium">
+              <LogOut className="h-5 w-5" />
+              Logout
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 } 

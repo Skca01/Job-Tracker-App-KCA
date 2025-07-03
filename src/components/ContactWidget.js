@@ -3,34 +3,36 @@ import { Github, Mail, Linkedin } from 'lucide-react';
 
 const AVATAR_URL = '/kent.jpg';
 
-export default function ContactWidget() {
+export default function ContactWidget({ showButton = true }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="fixed bottom-6 right-6 z-[99999] flex flex-col items-end">
+    <div className="flex flex-col items-end">
       {/* Contact Button with Ping and Tooltip */}
-      <div className="relative group">
-        <button
-          className="bg-gradient-to-tr from-blue-600 to-indigo-500 hover:from-blue-700 hover:to-indigo-600 text-white rounded-full shadow-xl p-3 flex items-center transition-all duration-200 border-2 border-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-          onMouseEnter={() => setOpen(true)}
-          onMouseLeave={() => setOpen(false)}
-          onFocus={() => setOpen(true)}
-          onBlur={() => setOpen(false)}
-          onClick={() => setOpen((o) => !o)}
-          aria-label="Contact Kent Carlo Amante"
-          tabIndex={0}
-        >
-          {/* Ping Animation */}
-          <span className="absolute -top-1 -right-1 flex h-3 w-3">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
+      {showButton && (
+        <div className="relative group">
+          <button
+            className="bg-gradient-to-tr from-blue-600 to-indigo-500 hover:from-blue-700 hover:to-indigo-600 text-white rounded-full shadow-xl p-3 flex items-center transition-all duration-200 border-2 border-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+            onMouseEnter={() => setOpen(true)}
+            onMouseLeave={() => setOpen(false)}
+            onFocus={() => setOpen(true)}
+            onBlur={() => setOpen(false)}
+            onClick={() => setOpen((o) => !o)}
+            aria-label="Contact Kent Carlo Amante"
+            tabIndex={0}
+          >
+            {/* Ping Animation */}
+            <span className="absolute -top-1 -right-1 flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
+            </span>
+            <Mail className="h-6 w-6" />
+          </button>
+          {/* Tooltip */}
+          <span className="absolute right-14 top-1/2 -translate-y-1/2 bg-gray-900 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity pointer-events-none select-none shadow-lg whitespace-nowrap">
+            Contact Kent Carlo Amante
           </span>
-          <Mail className="h-6 w-6" />
-        </button>
-        {/* Tooltip */}
-        <span className="absolute right-14 top-1/2 -translate-y-1/2 bg-gray-900 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity pointer-events-none select-none shadow-lg whitespace-nowrap">
-          Contact Kent Carlo Amante
-        </span>
-      </div>
+        </div>
+      )}
       {/* Contact Card */}
       {open && (
         <div

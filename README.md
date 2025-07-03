@@ -45,6 +45,7 @@ Before running this project, make sure you have:
 git clone <your-repo-url>
 cd job-tracker-app
 npm install
+npm install @heroicons/react
 ```
 
 ### 2. Firebase Configuration
