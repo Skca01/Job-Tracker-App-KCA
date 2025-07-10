@@ -286,9 +286,7 @@ export default function Dashboard() {
             </button>
           </div>
         </div>
-        {/* Floating Add Job Button for Mobile */}
-        {/* (Removed) */}
-
+ 
         {/* Job List */}
         {/* Mobile: horizontally scrollable job cards */}
         <div className="block md:hidden w-full overflow-x-auto pb-4" aria-label="Saved jobs list, swipe left or right">
@@ -337,7 +335,7 @@ export default function Dashboard() {
           onJobAdded={() => setShowAddModal(false)}
         />
       )}
-      {/* Floating ContactWidget for mobile, adjusted lower */}
+      {/* Floating ContactWidget for mobile */}
       {!showProfileModal && (
         <div className="fixed right-10 bottom-20 z-40 sm:hidden">
           <ContactWidget />
