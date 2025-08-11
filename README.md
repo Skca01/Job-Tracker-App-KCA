@@ -119,7 +119,15 @@ The application will open at `http://localhost:3000`
 
 ## 🚀 Deployment
 
-### Firebase Hosting
+### Option 1: Vercel (Recommended)
+
+1. **Connect your GitHub repository** to Vercel
+2. **Set environment variables** in Vercel Dashboard:
+   - Go to Project Settings → Environment Variables
+   - Add all Firebase environment variables (see SETUP.md for details)
+3. **Deploy automatically** - Vercel will deploy on every push to main branch
+
+### Option 2: Firebase Hosting
 
 1. Install Firebase CLI:
 ```bash
@@ -141,6 +149,8 @@ firebase init hosting
 npm run build
 firebase deploy
 ```
+
+**Note**: For both deployment options, you need to set environment variables in the hosting platform's dashboard.
 
 ## 📱 Usage
 
