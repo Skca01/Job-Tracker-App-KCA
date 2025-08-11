@@ -58,18 +58,25 @@ npm install @heroicons/react
 
 ### 3. Configure Firebase
 
-Replace the placeholder config in `src/firebase.js` with your actual Firebase configuration:
+**IMPORTANT: Never commit your actual Firebase API keys to version control!**
 
-```javascript
-const firebaseConfig = {
-  apiKey: "your-api-key",
-  authDomain: "your-project.firebaseapp.com",
-  projectId: "your-project-id",
-  storageBucket: "your-project.appspot.com",
-  messagingSenderId: "your-sender-id",
-  appId: "your-app-id"
-};
+1. Create a `.env` file in the root directory (this file is already in .gitignore)
+2. Add your Firebase configuration as environment variables:
+
+```bash
+# .env file (DO NOT commit this file)
+REACT_APP_FIREBASE_API_KEY=your_actual_api_key
+REACT_APP_FIREBASE_AUTH_DOMAIN=your_project_id.firebaseapp.com
+REACT_APP_FIREBASE_PROJECT_ID=your_project_id
+REACT_APP_FIREBASE_STORAGE_BUCKET=your_project_id.firebasestorage.app
+REACT_APP_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
+REACT_APP_FIREBASE_APP_ID=your_app_id
+REACT_APP_FIREBASE_MEASUREMENT_ID=your_measurement_id
 ```
+
+3. The application will automatically use these environment variables from `src/firebase.js`
+
+**Security Note**: The `.env` file is already in `.gitignore`, so your API keys will never be committed to GitHub.
 
 ### 4. Firestore Security Rules
 
