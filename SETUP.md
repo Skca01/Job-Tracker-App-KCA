@@ -15,13 +15,13 @@ Copy your Firebase configuration from the Firebase Console and add it to your `.
 
 ```bash
 # .env file
-REACT_APP_FIREBASE_API_KEY=AIzaSyBf2DNZg0mzrt8Wryt4AvcHMGa2B5PTeQc
-REACT_APP_FIREBASE_AUTH_DOMAIN=job-tracker-ac91c.firebaseapp.com
-REACT_APP_FIREBASE_PROJECT_ID=job-tracker-ac91c
-REACT_APP_FIREBASE_STORAGE_BUCKET=job-tracker-ac91c.firebasestorage.app
-REACT_APP_FIREBASE_MESSAGING_SENDER_ID=85193431892
-REACT_APP_FIREBASE_APP_ID=1:85193431892:web:502fabb92475bf2d9b86c1
-REACT_APP_FIREBASE_MEASUREMENT_ID=G-2TYF2ZFRTT
+REACT_APP_FIREBASE_API_KEY=your_actual_api_key_here
+REACT_APP_FIREBASE_AUTH_DOMAIN=your_project_id.firebaseapp.com
+REACT_APP_FIREBASE_PROJECT_ID=your_project_id
+REACT_APP_FIREBASE_STORAGE_BUCKET=your_project_id.firebasestorage.app
+REACT_APP_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
+REACT_APP_FIREBASE_APP_ID=your_app_id
+REACT_APP_FIREBASE_MEASUREMENT_ID=your_measurement_id
 ```
 
 ## ✅ Step 3: Verify Setup
@@ -29,6 +29,24 @@ REACT_APP_FIREBASE_MEASUREMENT_ID=G-2TYF2ZFRTT
 1. Restart your development server (`npm start`)
 2. Your app should work exactly the same as before
 3. Check that your `.env` file is NOT showing up in `git status`
+
+## 🚀 Step 4: Vercel Deployment (Production)
+
+**IMPORTANT**: For production deployment on Vercel, you need to set environment variables in Vercel's dashboard:
+
+1. **Go to Vercel Dashboard** → Your Project → Settings → Environment Variables
+2. **Add the same environment variables** with these exact names:
+   - `REACT_APP_FIREBASE_API_KEY`
+   - `REACT_APP_FIREBASE_AUTH_DOMAIN`
+   - `REACT_APP_FIREBASE_PROJECT_ID`
+   - `REACT_APP_FIREBASE_STORAGE_BUCKET`
+   - `REACT_APP_FIREBASE_MESSAGING_SENDER_ID`
+   - `REACT_APP_FIREBASE_APP_ID`
+   - `REACT_APP_FIREBASE_MEASUREMENT_ID`
+3. **Set Environment** to "Production" (and "Preview" if needed)
+4. **Redeploy** your application after adding variables
+
+**Note**: Local `.env` files only work for development. Vercel needs its own environment variables set in their dashboard.
 
 ## 🚨 Security Checklist
 
@@ -39,12 +57,32 @@ REACT_APP_FIREBASE_MEASUREMENT_ID=G-2TYF2ZFRTT
 
 ## 🔍 Troubleshooting
 
+### Local Development Issues
+
 If you get errors about missing environment variables:
 
 1. Make sure your `.env` file is in the root directory (same level as `package.json`)
 2. Restart your development server after creating the `.env` file
 3. Check that all environment variable names start with `REACT_APP_`
 4. Verify there are no spaces around the `=` sign in your `.env` file
+
+### Vercel Deployment Issues
+
+If you get `auth/invalid-api-key` errors on Vercel:
+
+1. **Check Vercel Environment Variables**:
+   - Go to Project Settings → Environment Variables
+   - Verify all 7 Firebase variables are set
+   - Ensure Environment is set to "Production"
+
+2. **Redeploy after adding variables**:
+   - Environment variables must be set BEFORE deployment
+   - Go to Deployments tab and click "Redeploy"
+
+3. **Common mistakes**:
+   - Forgetting to set environment variables in Vercel
+   - Using wrong variable names (must start with `REACT_APP_`)
+   - Not redeploying after adding variables
 
 ## 📚 Additional Resources
 
